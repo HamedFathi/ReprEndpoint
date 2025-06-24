@@ -23,6 +23,10 @@ Add the ReprEndpoint library to your project:
 <PackageReference Include="ReprEndpoint" Version="1.0.0" />
 ```
 
+Or visit the NuGet package page: [https://www.nuget.org/packages/ReprEndpoint](https://www.nuget.org/packages/ReprEndpoint)
+
+You can also install it via the Visual Studio Package Manager UI by searching for "ReprEndpoint".
+
 ### Basic Setup
 
 Configure your ASP.NET Core application to use ReprEndpoint:
