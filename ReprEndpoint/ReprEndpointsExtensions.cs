@@ -9,18 +9,17 @@ using Microsoft.Extensions.DependencyInjection;
 namespace TheReprEndpoint;
 
 /// <summary>
-/// Provides extension methods for registering and mapping Repr endpoints in the dependency injection container and routing system.
+/// Extension methods for registering and mapping Repr endpoints in the application.
 /// </summary>
 public static class ReprEndpointsExtensions
 {
     /// <summary>
-    /// Registers all Repr endpoints found in the specified assemblies with the dependency injection container.
-    /// If no assemblies are provided, scans all assemblies in the current AppDomain.
+    /// Registers all non-abstract endpoints derived from <see cref="ReprEndpointBase"/> found in the given assemblies.
     /// </summary>
-    /// <param name="services">The service collection to register endpoints with.</param>
-    /// <param name="serviceLifetime">The service lifetime for the registered endpoints. Default is Transient.</param>
-    /// <param name="assemblies">The assemblies to scan for endpoint types. If null or empty, scans all loaded assemblies.</param>
-    /// <returns>The service collection for method chaining.</returns>
+    /// <param name="services">The service collection.</param>
+    /// <param name="serviceLifetime">The service lifetime for each endpoint.</param>
+    /// <param name="assemblies">Optional assemblies to scan. If null or empty, current AppDomain assemblies are used.</param>
+    /// <returns>The updated <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddReprEndpoints(this IServiceCollection services,
         ServiceLifetime serviceLifetime = ServiceLifetime.Transient,
         params Assembly[]? assemblies)
@@ -40,13 +39,13 @@ public static class ReprEndpointsExtensions
     }
 
     /// <summary>
-    /// Registers specific Repr endpoint types with the dependency injection container.
+    /// Registers specific non-abstract endpoint types derived from <see cref="ReprEndpointBase"/>.
     /// </summary>
-    /// <param name="services">The service collection to register endpoints with.</param>
-    /// <param name="serviceLifetime">The service lifetime for the registered endpoints.</param>
-    /// <param name="endpointTypes">The specific endpoint types to register. Must inherit from ReprEndpointBase and not be abstract.</param>
-    /// <returns>The service collection for method chaining.</returns>
-    /// <exception cref="ArgumentException">Thrown when an endpoint type doesn't inherit from ReprEndpointBase or is abstract.</exception>
+    /// <param name="services">The service collection.</param>
+    /// <param name="serviceLifetime">The lifetime to use when registering the endpoints.</param>
+    /// <param name="endpointTypes">The endpoint types to register.</param>
+    /// <returns>The updated <see cref="IServiceCollection"/>.</returns>
+    /// <exception cref="ArgumentException">Thrown if a type is not derived from <see cref="ReprEndpointBase"/> or is abstract.</exception>
     public static IServiceCollection AddReprEndpoints(this IServiceCollection services,
         ServiceLifetime serviceLifetime,
         params Type[]? endpointTypes)
@@ -72,18 +71,17 @@ public static class ReprEndpointsExtensions
     }
 
     /// <summary>
-    /// Maps all registered Repr endpoints to the web application's routing system.
-    /// Endpoints with a GroupPrefix will be mapped under route groups, while others are mapped directly to the application.
+    /// Maps all registered endpoints to the <see cref="WebApplication"/>, grouping them if a group prefix is specified.
     /// </summary>
-    /// <param name="app">The web application to map endpoints to.</param>
-    /// <returns>The web application for method chaining.</returns>
+    /// <param name="app">The <see cref="WebApplication"/> to map the endpoints to.</param>
+    /// <returns>The modified <see cref="WebApplication"/>.</returns>
     public static WebApplication MapReprEndpoints(this WebApplication app)
     {
         var endpoints = app.Services.GetServices<ReprEndpointBase>();
 
         foreach (var endpoint in endpoints)
         {
-            if (!string.IsNullOrEmpty(endpoint.GroupPrefix))
+            if (!string.IsNullOrWhiteSpace(endpoint.GroupPrefix))
             {
                 var group = app.MapGroup(endpoint.GroupPrefix);
                 endpoint.ConfigureGroup?.Invoke(group);

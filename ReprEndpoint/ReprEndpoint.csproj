@@ -7,7 +7,7 @@
     <Authors>Hamed Fathi</Authors>
     <Company />
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Description>ReprEndpoint is a lightweight ASP.NET Core library that implements the REPR (Request-Endpoint-Response) pattern - a modern alternative to traditional controller-based APIs where each HTTP endpoint gets its own dedicated class.</Description>
     <LangVersion>latest</LangVersion>
     <PackageProjectUrl>https://github.com/HamedFathi/ReprEndpoint</PackageProjectUrl>

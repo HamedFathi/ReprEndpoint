@@ -20,7 +20,7 @@ The **REPR (Request-Endpoint-Response) pattern** is a modern architectural appro
 Add the ReprEndpoint library to your project:
 
 ```xml
-<PackageReference Include="ReprEndpoint" Version="1.0.0" />
+<PackageReference Include="ReprEndpoint" Version="1.0.1" />
 ```
 
 Or visit the NuGet package page: [https://www.nuget.org/packages/ReprEndpoint](https://www.nuget.org/packages/ReprEndpoint)
